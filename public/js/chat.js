@@ -7,11 +7,10 @@ socket.on('message', (message) => {
 
 // sending message to server
 const messageForm = document.querySelector('#message-form')
-const messageField = document.querySelector('input')
 
 messageForm.addEventListener('submit', (e) => {
     e.preventDefault()
-    const message = messageField.value
+    const message = e.target.elements.message.value
     socket.emit('sendMessage', message)
-    messageField.value = ''
+    e.target.elements.message.value = ''
 })
