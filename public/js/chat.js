@@ -15,6 +15,30 @@ const sidebartemplate = document.querySelector('#sidebar-template').innerHTML
 // options
 const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true })
 
+// autoscroll function
+const autoscroll = () => {
+    // New message element
+    const $newMessage = $messages.lastElementChild
+
+    // Height of the new message
+    const newMessageStyles = getComputedStyle($newMessage)
+    const newMessageMargin = parseInt(newMessageStyles.marginBottom)
+    const newMessageHeight = $newMessage.offsetHeight + newMessageMargin
+
+    // Visible height
+    const visibleHeight = $messages.offsetHeight
+
+    // Height of messages container
+    const containerHeight = $messages.scrollHeight
+
+    // How far have I scrolled?
+    const scrollOffset = $messages.scrollTop + visibleHeight
+
+    if (containerHeight - newMessageHeight <= (scrollOffset + 1)) {
+        $messages.scrollTop = $messages.scrollHeight
+    }
+}
+
 // listening for message sent by another client
 socket.on('message', (message) => {
     console.log(message)
@@ -24,6 +48,7 @@ socket.on('message', (message) => {
         createdAt: moment(message.createdAt).format('h:mm a')
     })
     $messages.insertAdjacentHTML('beforeend', html)
+    autoscroll()
 })
 
 socket.on('locationMessage', (location) => {
@@ -34,6 +59,7 @@ socket.on('locationMessage', (location) => {
         createdAt: moment(location.createdAt).format('h:mm a')
     })
     $messages.insertAdjacentHTML('beforeend', html)
+    autoscroll()
 })
 
 socket.on('roomData', ({ room, users}) => {
