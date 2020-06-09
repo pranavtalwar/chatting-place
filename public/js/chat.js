@@ -11,6 +11,9 @@ const $messages = document.querySelector('#messages')
 const messageTemplate = document.querySelector('#message-template').innerHTML
 const locationMessageTemplate = document.querySelector('#location-message-template').innerHTML
 
+// options
+const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true })
+
 // listening for message sent by another client
 socket.on('message', (message) => {
     console.log(message)
@@ -67,4 +70,11 @@ $locationButton.addEventListener('click', () => {
         })
         $locationButton.removeAttribute('disabled')
     })
+})
+
+socket.emit('join', { username, room }, (error) => {
+    if(error) {
+        alert(error)
+        location.href = '/'
+    }
 })
