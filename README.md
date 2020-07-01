@@ -1,4 +1,4 @@
-# Foobar
+# Chatting-place
 
 Chatting-Place is a simple web application allowing users to join rooms to send messages and their location.
 
